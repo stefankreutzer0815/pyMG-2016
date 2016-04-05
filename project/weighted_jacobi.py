@@ -23,7 +23,6 @@ class WeightedJacobi(SmootherBase):
             **kwargs: Arbitrary keyword arguments
         """
         super(WeightedJacobi, self).__init__(A, *args, **kwargs)
-
         self.P = sp.spdiags(self.A.diagonal(), 0, self.A.shape[0], self.A.shape[1],
                             format='csc')
         # precompute inverse of the preconditioner for later usage
@@ -43,5 +42,5 @@ class WeightedJacobi(SmootherBase):
             numpy.ndarray: the smoothed solution u_new of size
                 :attr:`pymg.problem_base.ProblemBase.ndofs`
         """
-        u_new = u_old + self.Pinv.dot(rhs + self.A.dot(u_old))
+        u_new = u_old + self.Pinv.dot(rhs - self.A.dot(u_old))
         return u_new
