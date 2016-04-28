@@ -24,11 +24,8 @@ class Poisson1D(ProblemBase):
             *args: Variable length argument list
             **kwargs: Arbitrary keyword arguments
         """
-<<<<<<< HEAD
-        self.dx = 1.0 / (ndofs+1)
-=======
         self.dx = 1.0 / (ndofs + 1)
->>>>>>> 0910c432306900ae5f0069ae520edfa3698ceed1
+
         # compute system matrix A, scale by 1/dx^2
         A = 1.0 / (self.dx ** 2) * self.__get_system_matrix(ndofs)
         rhs = self.__get_rhs(ndofs)
@@ -58,7 +55,8 @@ class Poisson1D(ProblemBase):
         Returns:
             numpy.ndarray: the right-hand side vector of size :attr:`ndofs`
         """
-        return np.zeros(ndofs)
+        print "using ones"
+        return np.ones(ndofs)
 
     @property
     def u_exact(self):

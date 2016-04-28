@@ -63,6 +63,25 @@ class MyMultigrid(MultigridBase):
 
         return self.vh[lstart]
 
+    def do_fmg_cycle(self, rhs, nu1, nu2):
+        self.list=[]
+        self.fh[0] = rhs
+        for l in range(0, self.nlevels - 1):
+            # restrict
+            self.fh[l + 1] = self.trans[l].restrict(self.fh[l])
+        # solve on coarsest level
+        self.vh[-1] = sLA.spsolve(self.Acoarse, self.fh[-1])
+        for l in reversed(range(0, self.nlevels - 1)):
+            # correct
+
+            self.vh[l] = self.trans[l].prolong(self.vh[l + 1])
+            self.list.append(self.vh[l])
+            self.vh[l] = self.do_v_cycle(self.vh[l], self.fh[l], nu1, nu2, l)
+            if(l==0): self.list.append(self.vh[l])
+        return self.vh[0]
+    def get_list(self):
+        return self.list
+
     def do_v_cycle_recursive(self, v0, rhs, nu1, nu2, level):
         """Recursive implementation of a V-cycle
 
