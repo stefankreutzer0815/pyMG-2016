@@ -55,7 +55,6 @@ class Poisson1D(ProblemBase):
         Returns:
             numpy.ndarray: the right-hand side vector of size :attr:`ndofs`
         """
-        print "using ones"
         return np.ones(ndofs)
 
     @property
